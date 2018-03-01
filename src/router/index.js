@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Meetups from '@/components/Meetups/Meetups'
 import NewMeetup from '@/components/Meetups/NewMeetup'
+import Meetup from '@/components/Meetups/Meetup'
 import SignUp from '@/components/User/SignUp'
 import SignIn from '@/components/User/SignIn'
 import UserProfile from '@/components/User/UserProfile'
@@ -25,6 +26,11 @@ export default new Router({
       path: '/meetups/new',
       name: 'NewMeetup',
       component: NewMeetup
+    },
+    {
+      path: '/meetups/:id',
+      name: 'Meetup',
+      component: Meetup
     },
     {
       path: '/signup',

@@ -10,7 +10,9 @@ Vue.use(Vuetify, {
     primary: colors.teal.darken1,
     secondary: colors.teal.lighten4,
     accent: colors.teal.accent4,
-    info: colors.teal.lighten1
+    info: colors.teal.lighten1,
+    alert: colors.teal.accent3,
+    bgcard: colors.teal.lighten3
   }
 })
 
