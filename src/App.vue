@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer app left v-model="sideNav">
+    <v-navigation-drawer temporary app left v-model="sideNav">
       <v-list>
         <v-list-tile 
           v-for="item in menuItems" 
@@ -14,7 +14,7 @@
         </v-list-tile>
       </v-list> 
     </v-navigation-drawer>
-    <v-toolbar app fixed class="teal lighten-3">
+    <v-toolbar app fixed class="headerColor">
       <v-toolbar-side-icon class="hidden-sm-and-up" @click="sideNav = !sideNav"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link tag="span" to="/" style="cursor: pointer">Meetups</router-link>

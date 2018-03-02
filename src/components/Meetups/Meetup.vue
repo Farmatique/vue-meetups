@@ -3,21 +3,22 @@
 		<v-container>
 			<v-layout row wrap>
 				<v-flex class="fluid">
-					<v-card class="bgcard">
+					<v-card class="headerColor">
 						<v-layout>
 							<v-flex>
-								<v-card-media src="https://upload.wikimedia.org/wikipedia/commons/4/48/1201044_original_%281%29.jpg" height="300px"></v-card-media>
-								<v-card-title primary-title>
-									<div>
-										<h3>Meetup at Dnipro</h3>
-										<hr>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde laborum ab iste nulla, quos iusto exercitationem inventore asperiores sapiente nemo ad aspernatur numquam officia in autem quae perferendis iure velit.</p>
-										<strong>27/03/2018</strong>
-									</div>
+								<v-card-title primary-title class="secondary">
+									<h2>{{ meetup.title }}</h2>
 								</v-card-title>
-					       <v-card-actions>
+								<v-card-media :src="meetup.imageUrl" height="300px"></v-card-media>
+				        <v-card-text>
+				        		<span>Location: </span> <strong>{{ meetup.location }}</strong>
+				        		<br>
+										<span>Date: </span><strong>{{ meetup.date }}</strong>
+										<p>{{ meetup.description }}</p>
+				        </v-card-text>
+				       	<v-card-actions>
 					       	<v-spacer></v-spacer>
-				          <v-btn right router to="/meetups/1" class="alert">
+				          <v-btn right router to="/meetups/1" class="buttonPrimary">
 				          	<v-icon flat left>info</v-icon>
 					          Register
 					        </v-btn>
@@ -30,3 +31,14 @@
 		</v-container>
 	</div>
 </template>
+
+<script>
+	export default {
+		props: ['id'],
+		computed:{
+			meetup(){
+				return this.$store.getters.loadedMeetup(this.id)
+			}
+		}
+	}
+</script>

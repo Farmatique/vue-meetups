@@ -6,6 +6,8 @@
 		    	v-for="meetup in meetups" 
 		    	:src="meetup.imageUrl" 
 		    	:key="meetup.id"
+		    	style="cursor: pointer"
+		    	@click.native="goToMeetup(meetup.id)"
 		    >
 					<div class="title text-xs-center py-3">{{ meetup.title }}</div>
 	    	</v-carousel-item>
@@ -24,12 +26,14 @@
 
 <script>
 	export default {
-		data(){
-			return{
-				meetups: [
-					{ imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/48/1201044_original_%281%29.jpg', id:'fgdgdsfsdf', title: 'Meetup at Dnipro' },
-					{ imageUrl: 'https://farm8.staticflickr.com/7387/13333327953_26bc37001e_k.jpg', id:'fgdgdsfsdfjjggc', title: 'Meetup at Kiev' }
-				]
+		computed: {
+			meetups(){
+				return this.$store.getters.featuredMeetups
+			}
+		},
+		methods: {
+			goToMeetup(id){
+				this.$router.push('meetups/' + id)
 			}
 		}
 	}
