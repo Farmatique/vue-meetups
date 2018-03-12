@@ -42,14 +42,23 @@
 export default {
   data () {
     return {
-      sideNav: false,
-      menuItems: [
-      {icon: 'add_box', title: 'New meetup', link: '/meetups/new'},
-      {icon: 'format_list_bulleted', title: 'View meetups', link: '/meetups'},
-      {icon: 'supervisor_account', title: 'User', link: '/profile'},
-      {icon: 'person_add', title: 'Sign Up', link: '/signup'},
-      {icon: 'person', title: 'Sign In', link: '/signin'}
+      sideNav: false
+    }
+  },
+  computed: {
+    menuItems(){
+      let MenuItems = [
+        {icon: 'person_add', title: 'Sign Up', link: '/signup'},
+        {icon: 'person', title: 'Sign In', link: '/signin'}
       ]
+      if(this.$store.getters.isUserAuthenticated){
+        MenuItems = [
+          {icon: 'add_box', title: 'New meetup', link: '/meetups/new'},
+          {icon: 'format_list_bulleted', title: 'View meetups', link: '/meetups'},
+          {icon: 'supervisor_account', title: 'User', link: '/profile'}
+        ]
+      }
+      return MenuItems;
     }
   },
   name: 'App'

@@ -32,7 +32,19 @@
 					      multi-line
 					      required
 					    ></v-text-field>
-					    <v-btn type="submit" :disabled="!isFormValid" class="primary">Add New Meetup</v-btn>
+
+					    
+						</v-flex>
+					</v-layout>
+					<v-layout row>
+						<v-flex flex xs12 sm6 offset-sm3>
+							<v-date-picker v-model="date"></v-date-picker>
+							<v-time-picker v-model="time"></v-time-picker>
+						</v-flex>
+					</v-layout>
+					<v-layout row>
+						<v-flex flex xs12 sm6 offset-sm3>
+							<v-btn type="submit" :disabled="!isFormValid" class="primary">Add New Meetup</v-btn>
 						</v-flex>
 					</v-layout>
 				</form>
@@ -48,7 +60,9 @@
 				title: '',
 				description: '',
 				imageUrl: '',
-				location: ''
+				location: '',
+				date: null,
+				time: null
 			}
 		},
 		computed: {
@@ -57,6 +71,10 @@
 							this.description !== '' &&
 							this.imageUrl !== '' &&
 							this.location !== ''
+			},
+			convertedDate () {
+				const fullDate = {date: this.date, time: this.time}
+				return fullDate;
 			}
 		},
 		methods: {
@@ -65,7 +83,8 @@
 					title: this.title,
 					description: this.description,
 					imageUrl: this.imageUrl,
-					location: this.location
+					location: this.location,
+					date: this.convertedDate
 				}
 				this.$store.dispatch('addNewMeetup', newMeetup)
 				this.$router.push('/meetups')

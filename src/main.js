@@ -5,6 +5,10 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import colors from 'vuetify/es5/util/colors'
 import { store } from './store'
+import DateFilter from './filters/date'
+import * as firebase from 'firebase'
+
+Vue.filter('date', DateFilter)
 
 Vue.use(Vuetify, {
   theme: {
@@ -14,7 +18,7 @@ Vue.use(Vuetify, {
     info: colors.teal.lighten1,
     alert: colors.teal.accent3,
     headerColor: colors.teal.lighten3,
-    buttonPrimary: colors.red.lighten1
+    buttonPrimary: colors.teal.lighten2
   }
 })
 
@@ -25,5 +29,14 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  created () {
+  	firebase.initializeApp({
+	    apiKey: "AIzaSyBDMeA4Q1_dKjxYrOcfTTwBfQgp1bz1kt4",
+		  authDomain: "meetups-a0391.firebaseapp.com",
+		  databaseURL: "https://meetups-a0391.firebaseio.com",
+		  projectId: "meetups-a0391",
+		  storageBucket: ""
+  	})
+  }
 })
