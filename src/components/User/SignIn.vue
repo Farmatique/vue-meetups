@@ -1,5 +1,10 @@
 <template>
 	<v-container>
+		<v-layout v-if="showError">
+			<v-flex sm6 offset-sm3 xs12>
+				<error-alert :showError="showError"></error-alert>
+			</v-flex>
+		</v-layout>
 		<v-layout row>
 			<v-flex sm6 offset-sm3 xs12>
 				<h2>Sign In</h2>
@@ -24,7 +29,12 @@
 	          type="password"
 	          required
 	        ></v-text-field>
-	        <v-btn type="submit">Log In</v-btn>
+	        <v-btn type="submit" :loading="loading">
+	        	Log In
+    	      <span slot="loader" class="custom-loader">
+			        <v-icon light>cached</v-icon>
+			      </span>
+	        </v-btn>
 				</form>
 			</v-flex>
 		</v-layout>
@@ -41,6 +51,12 @@
 		computed: {
 			user(){
 				return this.$store.getters.user
+			},
+			showError(){
+				return this.$store.getters.getError;
+			},
+			loading(){
+				return this.$store.getters.isLoading;
 			}
 		},
 		watch: {

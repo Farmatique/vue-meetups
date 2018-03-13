@@ -7,8 +7,10 @@ import colors from 'vuetify/es5/util/colors'
 import { store } from './store'
 import DateFilter from './filters/date'
 import * as firebase from 'firebase'
+import ErrorAlert from './components/Shared/ErrorAlert.vue'
 
 Vue.filter('date', DateFilter)
+Vue.component('error-alert', ErrorAlert)
 
 Vue.use(Vuetify, {
   theme: {

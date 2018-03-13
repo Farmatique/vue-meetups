@@ -1,5 +1,10 @@
 <template>
 	<v-container>
+		<v-layout v-if="showError">
+			<v-flex sm6 offset-sm3 xs12>
+				<error-alert :showError="showError"></error-alert>
+			</v-flex>
+		</v-layout>
 		<v-layout row>
 			<v-flex sm6 offset-sm3 xs12>
 				<h2>Sign Up</h2>
@@ -32,7 +37,12 @@
 	          type="password"
 	          :rules="[isPasswordsMatch]"
 	        ></v-text-field>
-	        <v-btn type="submit" :disabled="!isPasswordCorrect">Sign Up</v-btn>
+	        <v-btn type="submit" :loading="loading" :disabled="!isPasswordCorrect">
+	        	Sign Up
+    	      <span slot="loader" class="custom-loader">
+			        <v-icon light>cached</v-icon>
+			      </span>
+	        </v-btn>
 				</form>
 			</v-flex>
 		</v-layout>
@@ -55,6 +65,12 @@
 				if(this.password !== null && this.password!==''){
 					return this.password == this.confirmPassword ? true : false
 				}
+			},
+			showError(){
+				return this.$store.getters.getError;
+			},
+			loading(){
+				return this.$store.getters.isLoading;
 			}
 		},
 		methods: {

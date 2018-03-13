@@ -32,7 +32,9 @@ export const store = new VueX.Store({
 				date: '2018-03-22 11:15' 
 			}
 		],
-		user: null
+		user: null,
+		loading: false,
+		error: null
 	},
 	mutations: {
 		addNewMeetup (state, payload) {
@@ -40,6 +42,15 @@ export const store = new VueX.Store({
 		},
 		setUser(state, payload){
 			state.user = payload;
+		},
+		setError(state, payload){
+			state.error = payload;
+		},
+		setLoading(state, payload){
+			state.loading = payload
+		},
+		clearError(state){
+			state.error = false
 		}
 	},
 	actions: {
@@ -55,8 +66,11 @@ export const store = new VueX.Store({
 			commit('addNewMeetup', newMeetup)
 		},
 		onSignup ({commit}, payload){
+			commit('setLoading', true)
+			commit('clearError')
 			firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
 				.then(user => {
+					commit('setLoading', false)
 					const NewUser = {
 						id: user.uid,
 						registeredMeetups: ['']
@@ -65,12 +79,17 @@ export const store = new VueX.Store({
 					this.$router.push('/');
 				})
 				.catch(error => {
+					commit('setError', error.message)
+					commit('setLoading', false)
 					console.log(error)
 				})
 		},
 		onSignin ({commit}, payload){
+			commit('setLoading', true)
+			commit('clearError')
 			firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 				.then(user => {
+					commit('setLoading', false)
 					const NewUser = {
 						id: user.uid,
 						registeredMeetups: ['']
@@ -79,8 +98,13 @@ export const store = new VueX.Store({
 					this.$router.push('/');
 				})
 				.catch(error => {
+					commit('setError', error.message)
+					commit('setLoading', false)
 					console.log(error)
 				})
+		},
+		clearError({commit}){
+			commit('clearError')
 		}
 	},
 	getters: {
@@ -102,6 +126,12 @@ export const store = new VueX.Store({
 		},
 		user(state){
 			return state.user;
+		},
+		getError(state){
+			return state.error;
+		},
+		isLoading(state){
+			return state.loading;
 		}
 	}
 })
