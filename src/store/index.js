@@ -6,37 +6,15 @@ Vue.use(VueX);
 
 export const store = new VueX.Store({
 	state: {
-		loadedMeetups: [
-			{ 
-				imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/48/1201044_original_%281%29.jpg', 
-				id:'fgdgdsfsdfdnipro', 
-				title: 'JS Meetup at Dnipro',
-				location: 'Menora Centre',
-				description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis dicta ipsa totam, quaerat vel quo vitae dolores fugiat odio molestiae quod magni dolore eum quam omnis possimus ad iste voluptatem.',
-				date: '2018-03-08 18:00' 
-			},
-			{ 
-				imageUrl: 'https://farm8.staticflickr.com/7387/13333327953_26bc37001e_k.jpg', 
-				id:'fgdgdsfsdfjjggckiev', 
-				title: 'DevOps Meetup at Kiev',
-				location: 'Ocean Plaza',
-				description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis dicta ipsa totam, quaerat vel quo vitae dolores fugiat odio molestiae quod magni dolore eum quam omnis possimus ad iste voluptatem.',
-				date: '2018-04-01 14:00' 
-			},
-			{
-				imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/39/Hotel_Odessa.jpg', 
-				id:'fgdgdsfsbbg7767codessa', 
-				title: 'Sales`18 Meetup at Odessa',
-				location: 'Deribasovskaya, 58',
-				description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis dicta ipsa totam, quaerat vel quo vitae dolores fugiat odio molestiae quod magni dolore eum quam omnis possimus ad iste voluptatem.',
-				date: '2018-03-22 11:15' 
-			}
-		],
+		loadedMeetups: [],
 		user: null,
 		loading: false,
 		error: null
 	},
 	mutations: {
+		setMeetups(state, payload){
+			state.loadedMeetups = payload;
+		},
 		addNewMeetup (state, payload) {
 			state.loadedMeetups.push(payload)
 		},
@@ -60,10 +38,19 @@ export const store = new VueX.Store({
 					description: payload.description,
 					imageUrl: payload.imageUrl,
 					location: payload.location,
-					date: payload.date.date + ' ' + payload.date.time,
-					id: 'fdsfsdjjg'+payload.location.length+payload.location[0]
+					date: payload.date.date + ' ' + payload.date.time
 			}
-			commit('addNewMeetup', newMeetup)
+			firebase.database().ref('meetups').push(newMeetup)
+				.then(data => {
+					console.log(data)
+					commit('addNewMeetup', {
+						id: data.key,
+						...newMeetup
+					})
+				})
+				.catch(error => {
+					console.log(error)
+				})
 		},
 		onSignup ({commit}, payload){
 			commit('setLoading', true)
@@ -105,6 +92,29 @@ export const store = new VueX.Store({
 		},
 		clearError({commit}){
 			commit('clearError')
+		},
+		fetchMeetups({commit}){
+			commit('setLoading', true);
+			firebase.database().ref('meetups').once('value')
+				.then(data => {
+					const dataVal = data.val();
+					const meetups = [];
+					for(let key in dataVal){
+						meetups.push({
+							id: key,
+							imageUrl: dataVal[key].imageUrl,
+							title: dataVal[key].title,
+							location: dataVal[key].location,
+							description: dataVal[key].description,
+							date: dataVal[key].date
+						})
+					};
+					commit('setMeetups', meetups);
+					commit('setLoading', false);
+				})
+				.catch(error => {
+					console.log(error)
+				})
 		}
 	},
 	getters: {
