@@ -63,7 +63,7 @@ export const store = new VueX.Store({
 						registeredMeetups: ['']
 					}
 					commit('setUser', NewUser)
-					this.$router.push('/');
+					//this.$router.push('/');
 				})
 				.catch(error => {
 					commit('setError', error.message)
@@ -71,7 +71,7 @@ export const store = new VueX.Store({
 					console.log(error)
 				})
 		},
-		onSignin ({commit}, payload){
+		onSignin ({commit, dispatch}, payload){
 			commit('setLoading', true)
 			commit('clearError')
 			firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
@@ -81,8 +81,9 @@ export const store = new VueX.Store({
 						id: user.uid,
 						registeredMeetups: ['']
 					}
-					commit('setUser', NewUser)
-					this.$router.push('/');
+					commit('setUser', NewUser);
+					dispatch('fetchMeetups');
+					//this.$router.push('/');
 				})
 				.catch(error => {
 					commit('setError', error.message)
@@ -113,8 +114,23 @@ export const store = new VueX.Store({
 					commit('setLoading', false);
 				})
 				.catch(error => {
-					console.log(error)
+					console.log(error);
+					commit('setLoading', false);
 				})
+		},
+		autoLogin({commit, getters}, payload){
+			if(!getters.isUserAuthenticated){
+				if(payload != null){
+					commit('setUser', {id: payload.uid, registeredMeetups: []})
+				} else {
+					commit('setUser', null)
+				}
+			}
+		},
+		logout({commit}){
+			firebase.auth().signOut();
+			commit('setUser', null);
+			//this.$router.push('/');
 		}
 	},
 	getters: {

@@ -41,5 +41,8 @@ new Vue({
 		  storageBucket: ""
   	})
   	this.$store.dispatch('fetchMeetups');
+  	firebase.auth().onAuthStateChanged(user => {
+  		this.$store.dispatch('autoLogin', user);
+  	})
   }
 })

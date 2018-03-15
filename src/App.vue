@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer temporary app left v-model="sideNav">
-      <v-list>
+      <v-list >
         <v-list-tile 
           v-for="item in menuItems" 
           :key="item.title"
@@ -11,6 +11,12 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="logout">
+          <v-list-tile-action>
+            <v-icon>transfer_within_a_station</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Logout</v-list-tile-content>
         </v-list-tile>
       </v-list> 
     </v-navigation-drawer>
@@ -29,6 +35,10 @@
           :to="item.link">
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
+        </v-btn>
+        <v-btn flat @click="logout">
+          <v-icon left>transfer_within_a_station</v-icon>
+          Logout
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -59,6 +69,12 @@ export default {
         ]
       }
       return MenuItems;
+    }
+  },
+  methods: {  
+    logout(){
+      this.$store.dispatch('logout');
+      this.$router.push('/');
     }
   },
   name: 'App'
