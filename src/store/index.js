@@ -32,13 +32,14 @@ export const store = new VueX.Store({
 		}
 	},
 	actions: {
-		addNewMeetup ({commit}, payload) {
+		addNewMeetup ({commit, getters}, payload) {
 			const newMeetup = {
 					title: payload.title,
 					description: payload.description,
 					imageUrl: payload.imageUrl,
 					location: payload.location,
-					date: payload.date.date + ' ' + payload.date.time
+					date: payload.date.date + ' ' + payload.date.time,
+					creatorId: getters.user.id
 			}
 			firebase.database().ref('meetups').push(newMeetup)
 				.then(data => {

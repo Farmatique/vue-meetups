@@ -12,7 +12,7 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="logout">
+        <v-list-tile v-if="isUserAuthenticated" @click="logout">
           <v-list-tile-action>
             <v-icon>transfer_within_a_station</v-icon>
           </v-list-tile-action>
@@ -36,7 +36,7 @@
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
-        <v-btn flat @click="logout">
+        <v-btn v-if="isUserAuthenticated" flat @click="logout">
           <v-icon left>transfer_within_a_station</v-icon>
           Logout
         </v-btn>
@@ -69,6 +69,9 @@ export default {
         ]
       }
       return MenuItems;
+    },
+    isUserAuthenticated(){
+      return this.$store.getters.isUserAuthenticated;
     }
   },
   methods: {  
