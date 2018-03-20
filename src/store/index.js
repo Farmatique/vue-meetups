@@ -41,11 +41,25 @@ export const store = new VueX.Store({
 					date: payload.date.date + ' ' + payload.date.time,
 					creatorId: getters.user.id
 			}
+			let imageUrl = payload.imageUrl;
+			let key;
 			firebase.database().ref('meetups').push(newMeetup)
 				.then(data => {
-					console.log(data)
+					key = data.key;
+					return key;
+				})
+				.then(key => {
+					const ext = payload.image.name.slice(payload.image.name.lastIndexOf('.') + 1);
+					return firebase.storage().ref('meetups/' + key + '.' + ext).put(payload.image);
+				})
+				.then(file => {
+					imageUrl = file.metadata.downloadURLs[0];
+					firebase.database().ref('meetups').child(key).update({imageUrl: imageUrl})
+				})
+				.then(() => {
 					commit('addNewMeetup', {
-						id: data.key,
+						id: key,
+						imageUrl: imageUrl,
 						...newMeetup
 					})
 				})
