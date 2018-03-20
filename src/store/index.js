@@ -29,6 +29,14 @@ export const store = new VueX.Store({
 		},
 		clearError(state){
 			state.error = false
+		},
+		updateMeetup(state, payload){
+			const updatedMeetup = state.loadedMeetups.find(meetups => {
+				return meetups.id === payload.id;
+			})
+			console.log(updatedMeetup);
+			updatedMeetup.title = payload.title;
+			updatedMeetup.description = payload.description;
 		}
 	},
 	actions: {
@@ -146,6 +154,21 @@ export const store = new VueX.Store({
 			firebase.auth().signOut();
 			commit('setUser', null);
 			//this.$router.push('/');
+		},
+		updateMeetup({commit}, payload){
+			commit('setLoading', true);
+			const updateObj = {title: payload.title, description: payload.description, id: payload.id};
+
+			firebase.database().ref('meetups').child(payload.id).update(updateObj)
+				.then(() => {
+					console.log(payload);
+					commit('updateMeetup', updateObj);
+					commit('setLoading', false);
+				})
+				.catch(error => {
+					console.log(error);
+					commit('setLoading', false);
+				})
 		}
 	},
 	getters: {

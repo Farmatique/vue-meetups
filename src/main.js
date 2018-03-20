@@ -8,9 +8,11 @@ import { store } from './store'
 import DateFilter from './filters/date'
 import * as firebase from 'firebase'
 import ErrorAlert from './components/Shared/ErrorAlert.vue'
+import EditMeetupModal from './components/Meetups/EditMeetupModal.vue'
 
 Vue.filter('date', DateFilter)
 Vue.component('error-alert', ErrorAlert)
+Vue.component('edit-meetup-modal', EditMeetupModal)
 
 Vue.use(Vuetify, {
   theme: {
