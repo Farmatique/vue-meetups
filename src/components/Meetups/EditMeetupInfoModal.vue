@@ -21,6 +21,16 @@
 					<v-layout row>
 						<v-flex xs12>
 						  <v-text-field
+					      label="Location"
+					      id="location"
+					      v-model="location"
+					      required
+					    ></v-text-field>
+					  </v-flex>
+					</v-layout>
+					<v-layout row>
+						<v-flex xs12>
+						  <v-text-field
 					      label="Description"
 					      id="description"
 					      v-model="description"
@@ -46,6 +56,7 @@
 			return{
 				title: this.meetup.title,
 				description: this.meetup.description,
+				location: this.meetup.location,
 				modalOpen: false
 			}
 		},
@@ -57,6 +68,9 @@
 				}
 				if(this.meetup.description !== null || this.meetup.description !== undefined){
 					meetupObj.description = this.description;
+				}
+				if(this.meetup.location !== null || this.meetup.location !== undefined){
+					meetupObj.location = this.location;
 				}
 				meetupObj.id = this.meetup.id;
 				this.$store.dispatch('updateMeetup', meetupObj);

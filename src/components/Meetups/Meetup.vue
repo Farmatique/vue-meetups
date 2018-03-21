@@ -21,7 +21,7 @@
 									<h2>{{ meetup.title }}</h2>
 									<v-spacer></v-spacer>
 									<template>
-										<edit-meetup-modal :meetup="meetup"></edit-meetup-modal>
+										<edit-meetup-info-modal v-if="isUserCreator" :meetup="meetup"></edit-meetup-info-modal>
 									</template>
 								</v-card-title>
 								<v-card-media :src="meetup.imageUrl" height="300px"></v-card-media>
@@ -29,6 +29,7 @@
 				        		<span>Location: </span> <strong>{{ meetup.location }}</strong>
 				        		<br>
 										<span>Date: </span><strong>{{ meetup.date | date }}</strong>
+										<edit-meetup-date-modal v-if="isUserCreator" :meetup="meetup"></edit-meetup-date-modal>
 										<p>{{ meetup.description }}</p>
 				        </v-card-text>
 				       	<v-card-actions>
@@ -56,6 +57,9 @@
 			},
 			loading(){
 				return this.$store.getters.isLoading
+			},
+			isUserCreator(){
+				return this.meetup.creatorId === this.$store.getters.user.id
 			}
 		}
 	}

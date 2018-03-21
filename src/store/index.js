@@ -34,9 +34,18 @@ export const store = new VueX.Store({
 			const updatedMeetup = state.loadedMeetups.find(meetups => {
 				return meetups.id === payload.id;
 			})
-			console.log(updatedMeetup);
-			updatedMeetup.title = payload.title;
-			updatedMeetup.description = payload.description;
+			if(payload.title !== undefined){
+				updatedMeetup.title = payload.title
+			}
+			if(payload.description !== undefined){
+				updatedMeetup.description = payload.description
+			}
+			if(payload.location !== undefined){
+				updatedMeetup.location = payload.location
+			}
+			if(payload.date !== undefined){
+				updatedMeetup.date = payload.date
+			}
 		}
 	},
 	actions: {
@@ -46,7 +55,7 @@ export const store = new VueX.Store({
 					description: payload.description,
 					imageUrl: payload.imageUrl,
 					location: payload.location,
-					date: payload.date.date + ' ' + payload.date.time,
+					date: payload.date,
 					creatorId: getters.user.id
 			}
 			let imageUrl = payload.imageUrl;
@@ -130,7 +139,8 @@ export const store = new VueX.Store({
 							title: dataVal[key].title,
 							location: dataVal[key].location,
 							description: dataVal[key].description,
-							date: dataVal[key].date
+							date: dataVal[key].date,
+							creatorId: dataVal[key].creatorId
 						})
 					};
 					commit('setMeetups', meetups);
@@ -157,11 +167,21 @@ export const store = new VueX.Store({
 		},
 		updateMeetup({commit}, payload){
 			commit('setLoading', true);
-			const updateObj = {title: payload.title, description: payload.description, id: payload.id};
-
+			const updateObj = {id: payload.id};
+			if(payload.title !== undefined){
+				updateObj.title = payload.title
+			}
+			if(payload.description !== undefined){
+				updateObj.description = payload.description
+			}
+			if(payload.location !== undefined){
+				updateObj.location = payload.location
+			}
+			if(payload.date !== undefined){
+				updateObj.date = payload.date
+			}
 			firebase.database().ref('meetups').child(payload.id).update(updateObj)
 				.then(() => {
-					console.log(payload);
 					commit('updateMeetup', updateObj);
 					commit('setLoading', false);
 				})

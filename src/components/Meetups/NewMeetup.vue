@@ -60,10 +60,15 @@
 					</v-layout>
 					<v-layout row>
 						<v-flex flex xs12 sm6 offset-sm3>
-							<v-date-picker v-model="date"></v-date-picker>
+							<v-date-picker 
+							v-model="date"
+							></v-date-picker>
 						</v-flex>
 						<v-flex flex xs12 sm6>
-							<v-time-picker v-model="time"></v-time-picker>
+							<v-time-picker 
+							v-model="time"
+							format="24hr"
+							></v-time-picker>
 						</v-flex>
 					</v-layout>
 					<v-layout row>
@@ -98,8 +103,23 @@
 							this.location !== ''
 			},
 			convertedDate () {
-				const fullDate = {date: this.date, time: this.time}
-				return fullDate;
+				let newDate = new Date(); 
+				let date = new Date(this.date);
+				let day = date.getUTCDate();
+				let month = date.getUTCMonth();
+				let year = date.getUTCFullYear();
+				let hours = this.time.split(':')[0];
+				let minutes = this.time.split(':')[1];
+
+				newDate.setUTCDate(day);
+				newDate.setUTCMonth(month);
+				newDate.setUTCFullYear(year);
+				newDate.setHours(hours);
+				newDate.setMinutes(minutes);
+
+				// const fullDate = {date: this.date, time: this.time}
+				// return fullDate;
+				return newDate.toISOString();
 			}
 		},
 		methods: {
