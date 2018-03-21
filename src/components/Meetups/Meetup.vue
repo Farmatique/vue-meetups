@@ -59,7 +59,10 @@
 				return this.$store.getters.isLoading
 			},
 			isUserCreator(){
-				return this.meetup.creatorId === this.$store.getters.user.id
+				if(this.$store.getters.user){
+					return this.meetup.creatorId === this.$store.getters.user.id
+				}
+				return false;
 			}
 		}
 	}
