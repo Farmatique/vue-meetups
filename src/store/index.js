@@ -46,6 +46,19 @@ export const store = new VueX.Store({
 			if(payload.date !== undefined){
 				updatedMeetup.date = payload.date
 			}
+		},
+		registerForMeetup(state, payload){
+			const registeredMeetup = {
+				id: payload.id,
+				firebaseKey: payload.firebaseKey
+			}
+			state.user.registeredMeetups.push(registeredMeetup)
+		},
+		unregisterFromMeetup(state, payload){
+			const currentMeetup = state.user.registeredMeetups.findIndex(meetup => {
+				return meetup.id === payload.id
+			})
+			state.user.registeredMeetups.splice(currentMeetup, 1)
 		}
 	},
 	actions: {
@@ -160,6 +173,25 @@ export const store = new VueX.Store({
 				}
 			}
 		},
+		fetchUserData({commit, getters}){
+			if(getters.user){
+				commit('setLoading', true);
+				firebase.database().ref('users/' + getters.user.id + /registrations/).once('value')
+					.then(data => {
+						const formatData = data.val();
+						const registeredMeetups = [];
+						for(let key in formatData){
+							registeredMeetups.push({id: formatData[key], firebaseKey: key})
+						}
+						commit('setUser', {id: getters.user.id, registeredMeetups: registeredMeetups});
+						commit('setLoading', false);
+					})
+					.catch(error => {
+						console.log(error);
+						commit('setLoading', true);
+					})
+			}
+		},
 		logout({commit}){
 			firebase.auth().signOut();
 			commit('setUser', null);
@@ -189,6 +221,34 @@ export const store = new VueX.Store({
 					console.log(error);
 					commit('setLoading', false);
 				})
+		},
+		registerForMeetup({commit, getters}, payload){
+			if(getters.user.registeredMeetups.findIndex(meetup => { return meetup.id === payload;}) >= 0){
+				return
+			}
+			commit('setLoading', true);
+			// console.log(payload)
+			firebase.database().ref('users/' + getters.user.id + '/registrations/').push(payload)
+				.then(data => {
+					commit('setLoading', false);
+					// console.log('returned key: '+data.key);
+					commit('registerForMeetup', {id: payload, firebaseKey: data.key});
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		},
+		unregisterFromMeetup({commit, getters}, payload){
+			commit('setLoading', true);
+			const registeredMeetup = getters.user.registeredMeetups.find(elem => elem.id === payload);
+			firebase.database().ref('users/' + getters.user.id + '/registrations/').child(registeredMeetup.firebaseKey).remove()
+				.then(() => {
+					commit('setLoading', false);
+					commit('unregisterFromMeetup', {id: payload, firebaseKey: registeredMeetup.firebaseKey});
+				})
+				.catch(error => {
+					console.log(error)
+				}) 
 		}
 	},
 	getters: {

@@ -34,10 +34,7 @@
 				        </v-card-text>
 				       	<v-card-actions>
 					       	<v-spacer></v-spacer>
-				          <v-btn right router to="/meetups/1" class="buttonPrimary">
-				          	<v-icon flat left>info</v-icon>
-					          Register
-					        </v-btn>
+									<register-modal :meetupId="meetup.id" v-if="isUserAuth"></register-modal>
 				        </v-card-actions>
 			        </v-flex>
 						</v-layout>
@@ -63,6 +60,9 @@
 					return this.meetup.creatorId === this.$store.getters.user.id
 				}
 				return false;
+			},
+			isUserAuth(){
+				return this.$store.getters.user !== null
 			}
 		}
 	}
