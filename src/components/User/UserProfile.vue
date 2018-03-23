@@ -124,8 +124,8 @@
 	    }
 		},
 		created(){
-			this.$store.commit('setAuthUserRegisteredMeetups');
-			this.$store.commit('setAuthUserSelfMeetups');
+			this.$store.dispatch('setAuthUserRegisteredMeetups');
+			this.$store.dispatch('setAuthUserSelfMeetups');
 		}
 	}
 </script>
