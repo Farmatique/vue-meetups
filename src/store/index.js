@@ -8,6 +8,9 @@ export const store = new VueX.Store({
 	state: {
 		loadedMeetups: [],
 		user: null,
+		authUser: {},
+		authUserRegisteredMeetups: [],
+		authUserSelfMeetups: [],
 		loading: false,
 		error: null
 	},
@@ -59,6 +62,31 @@ export const store = new VueX.Store({
 				return meetup.id === payload.id
 			})
 			state.user.registeredMeetups.splice(currentMeetup, 1)
+		},
+		setAuthUser(state){
+			const user = firebase.auth().currentUser;
+			state.authUser.email = user.email;
+			state.authUser.id = user.uid
+		},
+		setAuthUserRegisteredMeetups(state){
+			const registeredMeetups = state.user.registeredMeetups;
+			const loadedMeetups = state.loadedMeetups;
+			let filtered = [];
+			for(let key in registeredMeetups){
+				const current = loadedMeetups.find(meetup => {
+					return meetup.id === registeredMeetups[key].id
+				})
+				filtered.push(current);
+			}
+			state.authUserRegisteredMeetups = filtered;
+		},
+		setAuthUserSelfMeetups(state){
+			const userId = state.authUser.id;
+			const loadedMeetups = state.loadedMeetups;
+			const filtered = loadedMeetups.filter(meetup => {
+				return meetup.creatorId === userId;
+			})
+			state.authUserSelfMeetups = filtered;
 		}
 	},
 	actions: {
@@ -249,6 +277,9 @@ export const store = new VueX.Store({
 				.catch(error => {
 					console.log(error)
 				}) 
+		},
+		fetchAuthUserMeetups({commit, getters}){
+
 		}
 	},
 	getters: {
@@ -269,13 +300,22 @@ export const store = new VueX.Store({
 			return state.user!==null && state.user!== 'undefined' ? true : false;
 		},
 		user(state){
-			return state.user;
+			return state.user
+		},
+		getAuthUser(state){
+			return state.authUser
+		},
+		getAuthUserRegisteredMeetups(state){
+			return state.authUserRegisteredMeetups;
+		},
+		getAuthUserSelfMeetups(state){
+			return state.authUserSelfMeetups;
 		},
 		getError(state){
-			return state.error;
+			return state.error
 		},
 		isLoading(state){
-			return state.loading;
+			return state.loading
 		}
 	}
 })

@@ -26,6 +26,7 @@ Vue.use(Vuetify, {
     info: colors.teal.lighten1,
     alert: colors.teal.accent3,
     headerColor: colors.teal.lighten3,
+    lighten2: colors.teal.lighten2,
     buttonPrimary: colors.teal.lighten2
   }
 })
@@ -50,6 +51,9 @@ new Vue({
   	firebase.auth().onAuthStateChanged(user => {
   		this.$store.dispatch('autoLogin', user);
   		this.$store.dispatch('fetchUserData');
+  		if(user !== null){
+  			this.$store.commit('setAuthUser');
+  		}
   	})
   }
 })
