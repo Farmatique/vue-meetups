@@ -101,29 +101,46 @@ export default {
 			commit('setUser', null);
 			//this.$router.push('/');
 		},
-		registerForMeetup({commit, getters}, payload){
-			if(getters.user.registeredMeetups.findIndex(meetup => { return meetup.id === payload;}) >= 0){
+		registerForMeetup({commit, getters, dispatch}, payload){
+			if(getters.user.registeredMeetups.findIndex(meetup => { return meetup.id === payload.id;}) >= 0){
 				return
 			}
 			commit('setLoading', true);
-			// console.log(payload)
-			firebase.database().ref('users/' + getters.user.id + '/registrations/').push(payload)
+			firebase.database().ref('users/' + getters.user.id + '/registrations/').push(payload.id)
 				.then(data => {
 					commit('setLoading', false);
-					// console.log('returned key: '+data.key);
-					commit('registerForMeetup', {id: payload, firebaseKey: data.key});
+					// console.log(payload.registered);
+					commit('registerForMeetup', {id: payload.id, firebaseKey: data.key});
+					dispatch('updateMeetup', {
+						id: payload.id, 
+						title: payload.title, 
+						description: payload.description,
+						location: payload.location,
+						date: payload.date,
+						registered: payload.registered,
+						registerCountChange: 1
+					})
 				})
 				.catch(error => {
 					console.log(error)
 				})
 		},
-		unregisterFromMeetup({commit, getters}, payload){
+		unregisterFromMeetup({commit, getters, dispatch}, payload){
 			commit('setLoading', true);
-			const registeredMeetup = getters.user.registeredMeetups.find(elem => elem.id === payload);
+			const registeredMeetup = getters.user.registeredMeetups.find(elem => elem.id === payload.id);
 			firebase.database().ref('users/' + getters.user.id + '/registrations/').child(registeredMeetup.firebaseKey).remove()
 				.then(() => {
 					commit('setLoading', false);
-					commit('unregisterFromMeetup', {id: payload, firebaseKey: registeredMeetup.firebaseKey});
+					commit('unregisterFromMeetup', {id: payload.id, firebaseKey: registeredMeetup.firebaseKey});
+					dispatch('updateMeetup', {
+						id: payload.id, 
+						title: payload.title, 
+						description: payload.description,
+						location: payload.location,
+						date: payload.date,
+						registered: payload.registered,
+						registerCountChange: -1
+					})
 				})
 				.catch(error => {
 					console.log(error)

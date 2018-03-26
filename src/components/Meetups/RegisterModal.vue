@@ -21,7 +21,7 @@
 </template>
 <script>
 	export default{
-		props: ['meetupId'],
+		props: ['meetup'],
 		data(){
 			return{
 				modalOpen: false
@@ -30,16 +30,16 @@
 		computed: {
 			isUserRegistered(){
 				return (this.$store.getters.user.registeredMeetups.findIndex(meetup => {
-					return meetup.id === this.meetupId;
+					return meetup.id === this.meetup.id;
 				}) >= 0)
 			}
 		},
 		methods: {
 			onConfirm(){
 				if(!this.isUserRegistered){
-					this.$store.dispatch('registerForMeetup', this.meetupId)
+					this.$store.dispatch('registerForMeetup', this.meetup)
 				} else {
-					this.$store.dispatch('unregisterFromMeetup', this.meetupId)
+					this.$store.dispatch('unregisterFromMeetup', this.meetup)
 				}
 			}
 		}

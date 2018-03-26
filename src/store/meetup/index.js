@@ -29,6 +29,9 @@ export default {
 			if(payload.date !== undefined){
 				updatedMeetup.date = payload.date
 			}
+			if(payload.registered !== undefined){
+				updatedMeetup.registered = payload.registered
+			}
 		},
 		setAuthUserRegisteredMeetups(state, payload){
 			state.authUserRegisteredMeetups = payload
@@ -45,7 +48,8 @@ export default {
 					imageUrl: payload.imageUrl,
 					location: payload.location,
 					date: payload.date,
-					creatorId: getters.user.id
+					creatorId: getters.user.id,
+					registered: 0
 			}
 			let imageUrl = payload.imageUrl;
 			let key;
@@ -87,7 +91,8 @@ export default {
 							location: dataVal[key].location,
 							description: dataVal[key].description,
 							date: dataVal[key].date,
-							creatorId: dataVal[key].creatorId
+							creatorId: dataVal[key].creatorId,
+							registered: dataVal[key].registered
 						})
 					};
 					commit('setMeetups', meetups);
@@ -115,6 +120,10 @@ export default {
 			}
 			if(payload.date !== undefined){
 				updateObj.date = payload.date
+			}
+			if(payload.registerCountChange !== undefined){
+				const changedRegCount = payload.registered + payload.registerCountChange;
+				updateObj.registered = changedRegCount;
 			}
 			firebase.database().ref('meetups').child(payload.id).update(updateObj)
 				.then(() => {

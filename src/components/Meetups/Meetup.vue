@@ -30,11 +30,13 @@
 				        		<br>
 										<span>Date: </span><strong>{{ meetup.date | date }}</strong>
 										<edit-meetup-date-modal v-if="isUserCreator" :meetup="meetup"></edit-meetup-date-modal>
+										<div>Users registered: <strong>{{ meetup.registered }}</strong></div>
+										<hr>
 										<p>{{ meetup.description }}</p>
 				        </v-card-text>
 				       	<v-card-actions>
 					       	<v-spacer></v-spacer>
-									<register-modal :meetupId="meetup.id" v-if="isUserAuth"></register-modal>
+									<register-modal :meetup="meetup" v-if="isUserAuth"></register-modal>
 				        </v-card-actions>
 			        </v-flex>
 						</v-layout>
