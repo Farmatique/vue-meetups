@@ -3,9 +3,9 @@
 			<v-btn slot="activator" class="primary">Edit Date & Time</v-btn>
 			<v-card>
 				<v-container>
-					<v-layout row>
+					<v-layout row mb-3>
 						<v-flex xs12>
-							<v-card-title>Edit Meetup Date & Time</v-card-title>
+							<h3>Edit Meetup Date & Time</h3>
 						</v-flex>
 					</v-layout>
 					<v-layout row>
@@ -21,7 +21,7 @@
 					</v-layout>
 						<v-flex xs12>
 							<v-btn @click="modalOpen = false">Close</v-btn>
-							<v-btn @click="onClickSave">Save</v-btn>
+							<v-btn class="green--text" @click="onClickSave">Save</v-btn>
 						</v-flex>
 					</v-layout>
 				</v-container>

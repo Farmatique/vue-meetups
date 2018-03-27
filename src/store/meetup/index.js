@@ -123,7 +123,11 @@ export default {
 			}
 			if(payload.registerCountChange !== undefined){
 				const changedRegCount = payload.registered + payload.registerCountChange;
-				updateObj.registered = changedRegCount;
+				if(payload.registered == 0 && payload.registerCountChange == -1){
+					updateObj.registered = payload.registered
+				} else {
+					updateObj.registered = changedRegCount;
+				}
 			}
 			firebase.database().ref('meetups').child(payload.id).update(updateObj)
 				.then(() => {

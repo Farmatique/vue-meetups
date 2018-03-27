@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-layout row wrap v-for="meetup in meetups" class="mb-2 mt-2">
-			<v-flex class="xs8 offset-xs2">
+			<v-flex class="xs12 sm8 offset-sm2">
 				<v-card class="secondary">
 					<v-layout row>
 						<v-flex class="xs4">
