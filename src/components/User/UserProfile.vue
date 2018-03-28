@@ -13,6 +13,7 @@
 				        </v-card-text>
 				       	<v-card-actions>
 					       	<v-spacer></v-spacer>
+   								<calendar-modal v-if="meetups.length > 0"></calendar-modal>
 									<v-btn @click="logout">Logout</v-btn>
 				        </v-card-actions>
 			        </v-flex>

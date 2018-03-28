@@ -11,12 +11,14 @@ import ErrorAlert from './components/Shared/ErrorAlert.vue'
 import EditMeetupInfoModal from './components/Meetups/EditMeetupInfoModal.vue'
 import EditMeetupDateModal from './components/Meetups/EditMeetupDateModal.vue'
 import RegisterModal from './components/Meetups/RegisterModal.vue'
+import CalendarModal from './components/User/CalendarModal.vue'
 
 Vue.filter('date', DateFilter)
 Vue.component('error-alert', ErrorAlert)
 Vue.component('edit-meetup-info-modal', EditMeetupInfoModal)
 Vue.component('edit-meetup-date-modal', EditMeetupDateModal)
 Vue.component('register-modal', RegisterModal)
+Vue.component('calendar-modal', CalendarModal)
 
 Vue.use(Vuetify, {
   theme: {
