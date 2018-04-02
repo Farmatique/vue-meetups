@@ -27,6 +27,7 @@ Vue.use(Vuetify, {
     accent: colors.teal.accent4,
     info: colors.teal.lighten1,
     alert: colors.teal.accent3,
+    background: colors.teal.lighten5,
     headerColor: colors.teal.lighten3,
     lighten2: colors.teal.lighten2,
     buttonPrimary: colors.teal.lighten2

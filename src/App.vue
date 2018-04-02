@@ -42,8 +42,15 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-content>
-      <router-view></router-view>
+    <v-content class="background">
+      <transition 
+        name="fade" 
+        mode="out-in" 
+        appear
+        appear-active-class="appear-custom-active"
+        appear-to-class="appear-custom-to">
+        <router-view></router-view>
+      </transition>
     </v-content>
   </v-app>
 </template>
@@ -90,7 +97,7 @@ export default {
     border-color: #ff5252 !important;
   }
 
-    .custom-loader {
+  .custom-loader {
     animation: loader 1s infinite;
     display: flex;
   }
@@ -125,5 +132,36 @@ export default {
     to {
       transform: rotate(360deg);
     }
+  }
+
+  .fade-enter{
+    opacity: 0;
+    -webkit-transition: .3s all ease-in;
+    -o-transition: .3s all ease-in;
+    transition: .3s all ease-in;
+  }
+  .fade-enter-active{
+    opacity: 1;
+    -webkit-transition: .3s all ease-in;
+    -o-transition: .3s all ease-in;
+    transition: .3s all ease-in;
+  }
+  .fade-leave-to{
+    opacity: 0;
+    -webkit-transition: .3s all ease-in;
+    -o-transition: .3s all ease-in;
+    transition: .3s all ease-in;
+  }
+  .appear-custom-active{
+    transform: scale(0);
+    -webkit-transition: .5s all ease-in;
+    -o-transition: .5s all ease-in;
+    transition: .5s all ease-in;
+  }
+  .appear-custom-to{
+    transform: scale(1);
+    -webkit-transition: .5s all ease-in;
+    -o-transition: .5s all ease-in;
+    transition: .5s all ease-in;
   }
 </style>
